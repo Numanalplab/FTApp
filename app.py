@@ -6,30 +6,34 @@ from scipy.interpolate import interp1d
 
 st.set_page_config(page_title="FTIR Spektrum Analizörü", layout="wide")
 
-st.title("🧪 FTApp")
-st.write("PerkinElmer Spectrum yazilimindan alinan .csv dosyasini yükleyin.")
+# ... (Kodun üst kısımları aynı kalacak)
 
-# Dosya Yükleme Alanı
+st.title("🧪 FTApp")
+
+# Sol menüye (Sidebar) laboratuvar dosya formatı için ayarlar ekliyoruz
+st.sidebar.header("⚙️ Dosya Format Ayarlari")
+st.sidebar.write("Cihazinizin çikti formatina göre ayarlayin:")
+
+# Excel görüntünüze göre Türkiye'de varsayılan: Seperator ";" ve Decimal "," olur
+csv_sep = st.sidebar.selectbox("Sütun Ayirici (Delimiter):", [";", ","], index=0)
+csv_decimal = st.sidebar.selectbox("Ondalik Ayirici (Decimal):", [",", "."], index=0)
+
+# 1. Dosya Yükleme Alanı
 uploaded_file = st.file_uploader("FTIR Veri Dosyasini Seçin (.csv)", type=["csv"])
 
-# Standart analiz bölgeleri
-REGIONS = {
-    "CH2 Antisimetrik Gerilme Bandi": {"min_x": 2800, "max_x": 3000},
-    "C=O Gerilme Bandi": {"min_x": 1700, "max_x": 1760},
-    "PO2- Antisimetrik Gerilme Bandi": {"min_x": 1210, "max_x": 1240}
-}
-
 if uploaded_file is not None:
-    
     try:
-        df = pd.read_csv(uploaded_file)
+
+        df = pd.read_csv(uploaded_file, skiprows=1, sep=csv_sep, decimal=csv_decimal)
         
+        # Sütun isimlerini temizleme
         df.columns = [c.strip() for c in df.columns]
         
-        x_col = df.columns[0]
-        y_col = df.columns[1]
+        x_col = df.columns[0] # cm-1
+        y_col = df.columns[1] # A
         
-        st.success(f"Veri başariyla yüklendi! Bulunan sütunlar: {x_col} ve {y_col}")
+        st.success(f"Veri başariyla yüklendi! Sütunlar: {x_col} ve {y_col}")
+        
         
         # 2. Bölge Seçimi
         selected_region_name = st.selectbox("Analiz Edilecek Pik Bölgesini Seçin:", list(REGIONS.keys()))
