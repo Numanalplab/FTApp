@@ -100,7 +100,7 @@ if uploaded_file is not None:
                     title=f"{selected_region_name} Detayli Analizi",
                     xaxis_title=f"{x_col} (cm⁻¹)",
                     yaxis_title=f"{y_col}",
-                    xaxis=dict(autorange="reverse"), 
+                    xaxis=dict(autorange="reversed"), 
                     template="plotly_white"
                 )
                 
