@@ -6,7 +6,11 @@ from scipy.interpolate import interp1d
 
 st.set_page_config(page_title="FTIR Spektrum Analizörü", layout="wide")
 
-# ... (Kodun üst kısımları aynı kalacak)
+REGIONS = {
+    "C=O Bölgesi (1800-1600 cm⁻¹)": {"min_x": 1600, "max_x": 1800},
+    "O-H / N-H Bölgesi (3600-3200 cm⁻¹)": {"min_x": 3200, "max_x": 3600},
+    "C-H Bölgesi (3000-2800 cm⁻¹)": {"min_x": 2800, "max_x": 3000},
+}
 
 st.title("🧪 FTApp")
 
